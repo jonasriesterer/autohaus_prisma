@@ -13,19 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:   psql --dbname=postgres --username=postgres --file=/init/buch/sql/create-db.sql
+-- Aufruf:   psql --dbname=autohaus --username=postgres --file=/init/autohaus/sql/copy-csv.sql
 
--- https://www.postgresql.org/docs/current/sql-createuser.html
--- https://www.postgresql.org/docs/current/sql-createrole.html
-CREATE USER buch PASSWORD 'p';
+SET search_path TO autohaus;
 
--- https://www.postgresql.org/docs/current/sql-createdatabase.html
-CREATE DATABASE buch;
-
--- https://www.postgresql.org/docs/current/role-attributes.html
--- https://www.postgresql.org/docs/current/ddl-priv.html
--- https://www.postgresql.org/docs/current/sql-grant.html
-GRANT ALL ON DATABASE buch TO buch;
-
--- https://www.postgresql.org/docs/current/sql-createtablespace.html
-CREATE TABLESPACE buchspace OWNER buch LOCATION '/tablespace/buch';
+-- https://www.postgresql.org/docs/current/sql-copy.html
+COPY buch FROM '/init/autohaus/csv/autohaus.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY titel FROM '/init/autohaus/csv/adresse.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY abbildung FROM '/init/autohaus/csv/auto.csv' (FORMAT csv, DELIMITER ';', HEADER true);

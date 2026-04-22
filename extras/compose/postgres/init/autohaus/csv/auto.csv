@@ -1,0 +1,7 @@
+id;kennzeichen;marke;modell;baujahr;autohaus_id
+100;KA-AB-123;BMW;X5;2022;100
+101;KA-CD-456;Audi;A4;2021;100
+102;M-XY-789;Mercedes;C200;2023;101
+103;M-YZ-321;VW;Golf;2020;101
+104;B-EM-900;Opel;Corsa;2019;102
+105;B-EM-901;Toyota;Yaris;2021;102

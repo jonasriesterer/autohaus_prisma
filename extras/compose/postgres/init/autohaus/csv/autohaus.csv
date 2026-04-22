@@ -1,0 +1,9 @@
+id;version;name;username;email;anzahl_fahrzeuge;gruendungsdatum;homepage;telefonnummer;erzeugt;aktualisiert
+100;0;Autohaus Karlsruhe;autohaus_karlsruhe;kontakt@autohaus-karlsruhe.de;15;1998-05-12;https://www.autohaus-karlsruhe.de;0721-123456;2026-04-12 10:00:00;2026-04-12 10:00:00
+101;0;Autohaus München;autohaus_muenchen;kontakt@autohaus-muenchen.de;28;2005-09-03;https://www.autohaus-muenchen.de;089-987654;2026-04-12 10:05:00;2026-04-12 10:05:00
+102;0;Autohaus Berlin;autohaus_berlin;kontakt@autohaus-berlin.de;12;2012-11-21;https://www.autohaus-berlin.de;030-246810;2026-04-12 10:10:00;2026-04-12 10:10:00
+103;0;Autohaus Hamburg;autohaus_hamburg;kontakt@autohaus-hamburg.de;20;2008-03-15;https://www.autohaus-hamburg.de;040-112233;2026-04-12 10:15:00;2026-04-12 10:15:00
+104;0;Autohaus Frankfurt;autohaus_frankfurt;kontakt@autohaus-frankfurt.de;18;2010-07-30;https://www.autohaus-frankfurt.de;069-445566;2026-04-12 10:20:00;2026-04-12 10:20:00
+105;0;Autohaus Stuttgart;autohaus_stuttgart;kontakt@autohaus-stuttgart.de;22;2003-01-22;https://www.autohaus-stuttgart.de;0711-778899;2026-04-12 10:25:00;2026-04-12 10:25:00
+106;0;Autohaus Dresden;autohaus_dresden;kontakt@autohaus-dresden.de;14;2015-06-10;https://www.autohaus-dresden.de;0351-334455;2026-04-12 10:30:00;2026-04-12 10:30:00
+107;0;Autohaus Leipzig;autohaus_leipzig;kontakt@autohaus-leipzig.de;10;2018-09-05;https://www.autohaus-leipzig.de;0341-998877;2026-04-12 10:35:00;2026-04-12 10:35:00

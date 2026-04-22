@@ -13,12 +13,12 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:   psql --dbname=buch --username=buch --file=/init/buch/sql/create-schema.sql
+-- Aufruf:   psql --dbname=patient --username=patient --file=/init/patient/sql/create-schema.sql
 
 -- https://www.postgresql.org/docs/devel/app-psql.html
 -- https://www.postgresql.org/docs/current/ddl-schemas.html
 -- https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-CREATE
 -- "user-private schema" (Default-Schema: public)
-CREATE SCHEMA IF NOT EXISTS AUTHORIZATION buch;
+CREATE SCHEMA IF NOT EXISTS AUTHORIZATION autohaus;
 
-ALTER ROLE buch SET search_path = 'buch';
+ALTER ROLE autohaus SET search_path = 'autohaus';
