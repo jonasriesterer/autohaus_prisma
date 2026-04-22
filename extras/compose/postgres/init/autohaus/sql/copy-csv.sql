@@ -18,6 +18,6 @@
 SET search_path TO autohaus;
 
 -- https://www.postgresql.org/docs/current/sql-copy.html
-COPY buch FROM '/init/autohaus/csv/autohaus.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/init/autohaus/csv/adresse.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/init/autohaus/csv/auto.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY autohaus FROM '/init/autohaus/csv/autohaus.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY adresse FROM '/init/autohaus/csv/adresse.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY auto FROM '/init/autohaus/csv/auto.csv' (FORMAT csv, DELIMITER ';', HEADER true);

@@ -55,5 +55,14 @@ CREATE TABLE IF NOT EXISTS auto (
     autohaus_id  INTEGER NOT NULL REFERENCES autohaus ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS autohaus_file (
+    id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
+    data            bytea NOT NULL,
+    filename        text NOT NULL,
+    mimetype        text,
+    autohaus_id     integer NOT NULL UNIQUE REFERENCES autohaus ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS autohaus_file_autohaus_id_idx ON autohaus_file(autohaus_id);
+
 CREATE INDEX IF NOT EXISTS auto_autohaus_id_idx ON auto(autohaus_id);
 CREATE INDEX IF NOT EXISTS auto_kennzeichen_idx ON auto(kennzeichen);

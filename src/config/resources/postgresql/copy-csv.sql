@@ -13,11 +13,11 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:   psql --dbname=buch --username=postgres --file=/init/buch/sql/copy-csv.sql
+-- Aufruf:   psql --dbname=autohaus --username=postgres --file=/init/autohaus/sql/copy-csv.sql
 
-SET search_path TO buch;
+SET search_path TO autohaus;
 
 -- https://www.postgresql.org/docs/current/sql-copy.html
-COPY buch FROM '/init/buch/csv/buch.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY titel FROM '/init/buch/csv/titel.csv' (FORMAT csv, DELIMITER ';', HEADER true);
-COPY abbildung FROM '/init/buch/csv/abbildung.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY autohaus FROM '/init/autohaus/csv/autohaus.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY adresse FROM '/init/autohaus/csv/adresse.csv' (FORMAT csv, DELIMITER ';', HEADER true);
+COPY auto FROM '/init/autohaus/csv/auto.csv' (FORMAT csv, DELIMITER ';', HEADER true);

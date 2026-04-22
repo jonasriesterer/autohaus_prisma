@@ -13,93 +13,56 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
--- Aufruf:   psql --dbname=buch --username=buch --file=/init/buch/sql/create-table.sql
-
--- text statt varchar(n):
--- "There is no performance difference among these three types, apart from a few extra CPU cycles
--- to check the length when storing into a length-constrained column"
--- ggf. CHECK(char_length(nachname) <= 255)
-
--- Indexe auflisten:
--- psql --dbname=buch --username=buch
---  SELECT   tablename, indexname, indexdef, tablespace
---  FROM     pg_indexes
---  WHERE    schemaname = 'buch'
---  ORDER BY tablename, indexname;
---  \q
-
 -- https://www.postgresql.org/docs/current/manage-ag-tablespaces.html
-SET default_tablespace = buchspace;
-
--- https://www.postgresql.org/docs/current/app-psql.html
--- https://www.postgresql.org/docs/current/ddl-schemas.html
--- https://www.postgresql.org/docs/current/ddl-schemas.html#DDL-SCHEMAS-CREATE
--- "user-private schema" (Default-Schema: public)
-CREATE SCHEMA IF NOT EXISTS AUTHORIZATION buch;
-
-ALTER ROLE buch SET search_path = 'buch';
-set search_path to 'buch';
-
--- https://www.postgresql.org/docs/current/sql-createtype.html
--- https://www.postgresql.org/docs/current/datatype-enum.html
-CREATE TYPE buchart AS ENUM ('EPUB', 'HARDCOVER', 'PAPERBACK');
+SET default_tablespace = autohausspace;
 
 -- https://www.postgresql.org/docs/current/sql-createtable.html
 -- https://www.postgresql.org/docs/current/datatype.html
-CREATE TABLE IF NOT EXISTS buch (
-                  -- https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-INT
-                  -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-PRIMARY-KEYS
-                  -- impliziter Index fuer Primary Key
-                  -- "GENERATED ALWAYS AS IDENTITY" gemaess SQL-Standard
-                  -- entspricht SERIAL mit generierter Sequenz buch_id_seq
-    id            integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
-                  -- https://www.postgresql.org/docs/current/ddl-constraints.html#id-1.5.4.6.6
-    version       integer NOT NULL DEFAULT 0,
-                  -- impliziter Index als B-Baum durch UNIQUE
-                  -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-UNIQUE-CONSTRAINTS
-    isbn          text NOT NULL UNIQUE,
-                  -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS
-                  -- https://www.postgresql.org/docs/current/functions-matching.html#FUNCTIONS-POSIX-REGEXP
-    rating        integer NOT NULL CHECK (rating >= 0 AND rating <= 5),
-    art           buchart,
-                  -- https://www.postgresql.org/docs/current/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL
-                  -- 10 Stellen, davon 2 Nachkommastellen
-    preis         decimal(8,2) NOT NULL,
-    rabatt        decimal(4,3) NOT NULL,
-                  -- https://www.postgresql.org/docs/current/datatype-boolean.html
-    lieferbar     boolean NOT NULL DEFAULT FALSE,
-                  -- https://www.postgresql.org/docs/current/datatype-datetime.html
-    datum         date,
-    homepage      text,
-                  -- https://www.postgresql.org/docs/current/datatype-json.html
-    schlagwoerter jsonb,
-                  -- https://www.postgresql.org/docs/current/datatype-datetime.html
-    erzeugt       timestamp NOT NULL DEFAULT NOW(),
-    aktualisiert  timestamp NOT NULL DEFAULT NOW()
+CREATE TABLE IF NOT EXISTS autohaus (
+    id              INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
+    version         INTEGER NOT NULL DEFAULT 0,
+    name            TEXT NOT NULL,
+    username        TEXT NOT NULL,
+    email           TEXT NOT NULL,
+    anzahl_fahrzeuge INTEGER NOT NULL,
+    gruendungsdatum DATE NOT NULL,
+    homepage        TEXT,
+    telefonnummer   TEXT,
+    erzeugt         TIMESTAMP NOT NULL DEFAULT NOW(),
+    aktualisiert    TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS titel (
-    id          integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
-    titel       text NOT NULL,
-    untertitel  text,
-                -- https://www.postgresql.org/docs/current/ddl-constraints.html#DDL-CONSTRAINTS-FK
-    buch_id     integer NOT NULL UNIQUE REFERENCES buch ON DELETE CASCADE
+-- default: btree
+CREATE INDEX IF NOT EXISTS autohaus_name_idx ON autohaus(name);
+
+CREATE TABLE IF NOT EXISTS adresse (
+    id          INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
+    plz         TEXT NOT NULL CHECK (plz ~ '\d{5}'),
+    ort         TEXT NOT NULL,
+    land        TEXT NOT NULL,
+    autohaus_id INTEGER NOT NULL REFERENCES autohaus ON DELETE CASCADE
 );
 
+CREATE INDEX IF NOT EXISTS adresse_autohaus_id_idx ON adresse(autohaus_id);
+CREATE INDEX IF NOT EXISTS adresse_plz_idx ON adresse(plz);
 
-CREATE TABLE IF NOT EXISTS abbildung (
-    id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
-    beschriftung    text NOT NULL,
-    content_type    text NOT NULL,
-    buch_id         integer NOT NULL REFERENCES buch ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS auto (
+    id           INTEGER GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
+    kennzeichen  TEXT NOT NULL,
+    marke        TEXT NOT NULL,
+    modell       TEXT NOT NULL,
+    baujahr      NUMERIC(4,0) NOT NULL,
+    autohaus_id  INTEGER NOT NULL REFERENCES autohaus ON DELETE CASCADE
 );
-CREATE INDEX IF NOT EXISTS abbildung_buch_id_idx ON abbildung(buch_id);
 
-CREATE TABLE IF NOT EXISTS buch_file (
+CREATE TABLE IF NOT EXISTS autohaus_file (
     id              integer GENERATED ALWAYS AS IDENTITY(START WITH 1000) PRIMARY KEY,
     data            bytea NOT NULL,
     filename        text NOT NULL,
     mimetype        text,
-    buch_id         integer NOT NULL UNIQUE REFERENCES buch ON DELETE CASCADE
+    autohaus_id     integer NOT NULL UNIQUE REFERENCES autohaus ON DELETE CASCADE
 );
-CREATE INDEX IF NOT EXISTS buch_file_buch_id_idx ON buch_file(buch_id);
+CREATE INDEX IF NOT EXISTS autohaus_file_autohaus_id_idx ON autohaus_file(autohaus_id);
+
+CREATE INDEX IF NOT EXISTS auto_autohaus_id_idx ON auto(autohaus_id);
+CREATE INDEX IF NOT EXISTS auto_kennzeichen_idx ON auto(kennzeichen);
