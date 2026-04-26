@@ -247,7 +247,7 @@ gesetzt sein:
 
 ```shell
     # Windows:
-    $env:DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/server.crt'
+    $env:DATABASE_URL='postgresql://autohaus:p@localhost/autohaus?schema=autohaus&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/server.crt'
 
     # macOS:
     DATABASE_URL='postgresql://buch:p@localhost/buch?schema=buch&connection_limit=10&sslnegotiation=direct?sslcert=src/config/resources/postgresql/server.crt'
@@ -255,11 +255,11 @@ gesetzt sein:
 
 Dadurch ist folgendes konfiguriert:
 
-- Benutzername: `buch`
+- Benutzername: `autohaus`
 - Passwort: `p`
 - DB-Host: `localhost`
-- DB-Name: `buch`
-- Schema: `buch`
+- DB-Name: `autohaus`
+- Schema: `autohaus`
 - Größe des Verbindungs-Pools: max. `10` Verbindungen
 - SSL: durch die Zertifikatsdatei `server.crt` im Verzeichnis `src\config\resources\postgresql`
 
