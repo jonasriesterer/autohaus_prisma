@@ -18,13 +18,13 @@
 //
 //          bun --env-file=.env src\beispiele.mts
 
-import process from 'node:process';
-import { styleText } from 'node:util';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { prismaQueryInsights } from '@prisma/sqlcommenter-query-insights';
+import process from 'node:process';
+import { styleText } from 'node:util';
 import {
     PrismaClient,
-    type Buch,
+    type Autohaus,
     type Prisma,
 } from './generated/prisma/client.ts';
 
@@ -52,7 +52,7 @@ const log: (Prisma.LogLevel | Prisma.LogDefinition)[] = [
 ];
 
 // PrismaClient passend zur Umgebungsvariable DATABASE_URL in ".env"
-// d.h. mit PostgreSQL-User "buch" und Schema "buch"
+// d.h. mit PostgreSQL-User "autohaus" und Schema "autohaus"
 const prisma = new PrismaClient({
     // shorthand property
     adapter,
@@ -69,68 +69,68 @@ prisma.$on('query', (e) => {
     console.log(message);
 });
 
-export type BuchMitTitelUndAbbildungen = Prisma.BuchGetPayload<{
+export type AutohausMitAdresseUndAutos = Prisma.AutohausGetPayload<{
     include: {
-        titel: true;
-        abbildungen: true;
+        adresse: true;
+        auto: true;
     };
 }>;
 
-// Operationen mit dem Model "Buch"
+// Operationen mit dem Model "Autohaus"
 try {
     await prisma.$connect();
 
     // Das Resultat ist null, falls kein Datensatz gefunden
-    const buch: Buch | null = await prisma.buch.findUnique({
+    const autohaus: Autohaus | null = await prisma.autohaus.findUnique({
         where: { id: 1 },
     });
-    message = styleText(['black', 'bgWhite'], 'buch');
-    console.log(`${message} = %j`, buch);
+    message = styleText(['black', 'bgWhite'], 'autohaus');
+    console.log(`${message} = %j`, autohaus);
     console.log();
 
     // SELECT *
-    // FROM   buch
-    // JOIN   titel ON buch.id = titel.buch_id
-    // WHERE  titel.titel LIKE "%n%"
-    const buecher: BuchMitTitelUndAbbildungen[] = await prisma.buch.findMany({
-        where: {
-            titel: {
-                // https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations
-                titel: {
+    // FROM   autohaus
+    // JOIN   adresse ON autohaus.id = adresse.autohaus_id
+    // JOIN   auto ON autohaus.id = auto.autohaus_id
+    // WHERE  autohaus.name LIKE "%a%"
+    const autohaeuser: AutohausMitAdresseUndAutos[] =
+        await prisma.autohaus.findMany({
+            where: {
+                name: {
+                    // https://www.prisma.io/docs/orm/prisma-client/queries/filtering-and-sorting#filter-on-relations
                     // https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators
-                    contains: 'n',
+                    contains: 'a',
                 },
             },
-        },
-        // Fetch-Join mit Titel und Abbildungen
-        include: {
-            titel: true,
-            abbildungen: true,
-        },
-    });
-    message = styleText(['black', 'bgWhite'], 'buecherMitAbb');
-    console.log(`${message} = %j`, buecher);
+            // Fetch-Join mit Adresse und Auto
+            include: {
+                adresse: true,
+                auto: true,
+            },
+        });
+    message = styleText(['black', 'bgWhite'], 'autohaeuser');
+    console.log(`${message} = %j`, autohaeuser);
     console.log();
 
     // higher-order function und arrow function
-    const schlagwoerter = buecher.map((b) => b.schlagwoerter);
-    message = styleText(['black', 'bgWhite'], 'schlagwoerter');
-    console.log(`${message} = %j`, schlagwoerter);
+    const namenAutohaus = autohaeuser.map((a) => a.name);
+    message = styleText(['black', 'bgWhite'], 'namenAutohaus');
+    console.log(`${message} = %j`, namenAutohaus);
     console.log();
 
-    // union type
-    const titel = buecher.map((b) => b.titel?.titel);
-    message = styleText(['black', 'bgWhite'], 'titel');
-    console.log(`${message} = %j`, titel);
+    // union type - Orte aus den Adressen
+    const orte = autohaeuser.flatMap((a) => a.adresse.map((ad) => ad.ort));
+    message = styleText(['black', 'bgWhite'], 'orte');
+    console.log(`${message} = %j`, orte);
     console.log();
 
     // Pagination
-    const buecherPage2: Buch[] = await prisma.buch.findMany({
-        skip: 5,
+    const autohaeuser2: Autohaus[] = await prisma.autohaus.findMany({
+        skip: 0,
         take: 5,
     });
-    message = styleText(['black', 'bgWhite'], 'buecherPage2');
-    console.log(`${message} = %j`, buecherPage2);
+    message = styleText(['black', 'bgWhite'], 'autohaeuser2');
+    console.log(`${message} = %j`, autohaeuser2);
     console.log();
 } finally {
     await prisma.$disconnect();
@@ -142,17 +142,15 @@ const adapterAdmin = new PrismaPg({
 });
 const prismaAdmin = new PrismaClient({ adapter: adapterAdmin });
 try {
-    const buecherAdmin: Buch[] = await prismaAdmin.buch.findMany({
+    const autohaeuser_admin: Autohaus[] = await prismaAdmin.autohaus.findMany({
         where: {
-            titel: {
-                titel: {
-                    contains: 'n',
-                },
+            name: {
+                contains: 'a',
             },
         },
     });
-    message = styleText(['black', 'bgWhite'], 'buecherAdmin');
-    console.log(`${message} = ${JSON.stringify(buecherAdmin)}`);
+    message = styleText(['black', 'bgWhite'], 'autohaeuser_admin');
+    console.log(`${message} = ${JSON.stringify(autohaeuser_admin)}`);
 } finally {
     await prismaAdmin.$disconnect();
 }

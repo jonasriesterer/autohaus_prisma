@@ -44,8 +44,8 @@ const log: (Prisma.LogLevel | Prisma.LogDefinition)[] = [
     'error',
 ];
 
-// PrismaClient fuer DB "buch" (siehe Umgebungsvariable DATABASE_URL in ".env")
-// d.h. mit PostgreSQL-User "buch" und Schema "buch"
+// PrismaClient fuer DB "autohaus" (siehe Umgebungsvariable DATABASE_URL in ".env")
+// d.h. mit PostgreSQL-User "autohaus" und Schema "autohaus"
 const prisma = new PrismaClient({
     adapter,
     errorFormat: 'pretty',
@@ -58,86 +58,80 @@ prisma.$on('query', (e) => {
     console.log(message);
 });
 
-const neuesBuch: Prisma.BuchCreateInput = {
+const neuesAutohaus: Prisma.AutohausCreateInput = {
     // Spaltentyp "text"
-    isbn: '978-0-007-00644-1',
+    name: 'Mein Autohaus',
+    username: 'autohaus_user',
+    email: 'info@autohaus.de',
     // Spaltentyp "integer"
-    rating: 1,
-    // Spaltentyp "enum('HARDCOVER', ...)"
-    art: 'HARDCOVER',
-    // number -> Spaltentyp "numeric"
-    preis: 99.99,
-    rabatt: 0.0123,
-    // Spaltentyp "boolean"
-    lieferbar: true,
-    // Datum im Format ISO8601 fuer Spaltentyp "date"
-    datum: '2025-02-28T00:00:00Z',
-    homepage: 'https://beispiele.prisma',
-    // Spaltentyp "jsonb"
-    schlagwoerter: ['JAVASCRIPT', 'TYPESCRIPT'],
-    // 1:1-Beziehung
-    titel: {
-        create: {
-            titel: 'Beispiel',
-            untertitel: 'beispiel',
-        },
-    },
-    // 1:N-Beziehung
-    abbildungen: {
+    anzahl_fahrzeuge: 50,
+    // Spaltentyp "date"
+    gruendungsdatum: '2020-01-15',
+    homepage: 'https://mein-autohaus.de',
+    telefonnummer: '+49 123 456789',
+    // 1:N-Beziehung: Adressen
+    adresse: {
         create: [
             {
-                beschriftung: 'Abb. 1',
-                contentType: 'img/png',
+                plz: '76133',
+                ort: 'Karlsruhe',
+                land: 'Deutschland',
+            },
+        ],
+    },
+    // 1:N-Beziehung: Autos
+    auto: {
+        create: [
+            {
+                kennzeichen: 'KA-XX-1001',
+                marke: 'BMW',
+                modell: '320i',
+                baujahr: 2023,
             },
         ],
     },
 };
-type BuchCreated = Prisma.BuchGetPayload<{
+type AutohausCreated = Prisma.AutohausGetPayload<{
     include: {
-        titel: true;
-        abbildungen: true;
+        adresse: true;
+        auto: true;
     };
 }>;
 
-const geaendertesBuch: Prisma.BuchUpdateInput = {
+const geaenderesAutohaus: Prisma.AutohausUpdateInput = {
     version: { increment: 1 },
-    rating: 5,
-    art: 'HARDCOVER',
-    preis: 3333,
-    rabatt: 0.033,
-    lieferbar: true,
-    // datum: '2025-03-03T00:00:00Z',
-    homepage: 'https://geaendert.put.rest',
-    schlagwoerter: ['JAVA'],
+    anzahl_fahrzeuge: 75,
+    homepage: 'https://mein-autohaus-updated.de',
+    telefonnummer: '+49 987 654321',
 };
-type BuchUpdated = Prisma.BuchGetPayload<{}>; // eslint-disable-line @typescript-eslint/no-empty-object-type
+type AutohausUpdated = Prisma.AutohausGetPayload<{}>; // eslint-disable-line @typescript-eslint/no-empty-object-type
 
-// Schreib-Operationen mit dem Model "Buch"
+// Schreib-Operationen mit dem Model "Autohaus"
 try {
     await prisma.$connect();
     await prisma.$transaction(async (tx) => {
         // Neuer Datensatz mit generierter ID
-        const buchDb: BuchCreated = await tx.buch.create({
-            data: neuesBuch,
-            include: { titel: true, abbildungen: true },
+        const autohausDb: AutohausCreated = await tx.autohaus.create({
+            data: neuesAutohaus,
+            include: { adresse: true, auto: true },
         });
         message = styleText(['black', 'bgWhite'], 'Generierte ID:');
-        console.log(`${message} ${buchDb.id}`);
+        console.log(`${message} ${autohausDb.id}`);
         console.log();
 
         // Version +1 wegen "Optimistic Locking" bzw. Vermeidung von "Lost Updates"
-        const buchUpdated: BuchUpdated = await tx.buch.update({
-            data: geaendertesBuch,
-            where: { id: 30 },
+        const autohausUpdated: AutohausUpdated = await tx.autohaus.update({
+            data: geaenderesAutohaus,
+            where: { id: 1 },
         });
         // eslint-disable-next-line require-atomic-updates
         message = styleText(['black', 'bgWhite'], 'Aktualisierte Version:');
-        console.log(`${message} ${buchUpdated.version}`);
+        console.log(`${message} ${autohausUpdated.version}`);
         console.log();
 
         // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions#referential-action-defaults
         // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/relation-mode
-        const geloescht = await tx.buch.delete({ where: { id: 70 } });
+        const geloescht = await tx.autohaus.delete({ where: { id: 2 } });
         // eslint-disable-next-line require-atomic-updates
         message = styleText(['black', 'bgWhite'], 'Geloescht:');
         console.log(`${message} ${geloescht.id}`);
