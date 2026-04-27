@@ -142,15 +142,15 @@ const adapterAdmin = new PrismaPg({
 });
 const prismaAdmin = new PrismaClient({ adapter: adapterAdmin });
 try {
-    const autohaeuser_admin: Autohaus[] = await prismaAdmin.autohaus.findMany({
+    const autohaeuserAdmin: Autohaus[] = await prismaAdmin.autohaus.findMany({
         where: {
             name: {
                 contains: 'a',
             },
         },
     });
-    message = styleText(['black', 'bgWhite'], 'autohaeuser_admin');
-    console.log(`${message} = ${JSON.stringify(autohaeuser_admin)}`);
+    message = styleText(['black', 'bgWhite'], 'autohaeuserAdmin');
+    console.log(`${message} = ${JSON.stringify(autohaeuserAdmin)}`);
 } finally {
     await prismaAdmin.$disconnect();
 }

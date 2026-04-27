@@ -64,7 +64,7 @@ const neuesAutohaus: Prisma.AutohausCreateInput = {
     username: 'autohaus_user',
     email: 'info@autohaus.de',
     // Spaltentyp "integer"
-    anzahl_fahrzeuge: 50,
+    anzahlFahrzeuge: 50,
     // Spaltentyp "date"
     gruendungsdatum: '2020-01-15',
     homepage: 'https://mein-autohaus.de',
@@ -100,7 +100,7 @@ type AutohausCreated = Prisma.AutohausGetPayload<{
 
 const geaenderesAutohaus: Prisma.AutohausUpdateInput = {
     version: { increment: 1 },
-    anzahl_fahrzeuge: 75,
+    anzahlFahrzeuge: 75,
     homepage: 'https://mein-autohaus-updated.de',
     telefonnummer: '+49 987 654321',
 };
