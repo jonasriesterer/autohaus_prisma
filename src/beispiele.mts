@@ -81,7 +81,7 @@ try {
     await prisma.$connect();
 
     // Das Resultat ist null, falls kein Datensatz gefunden
-    const autohaus: Autohaus | null = await prisma.autohaus.findUnique({
+    const autohaus = await prisma.autohaus.findUnique({
         where: { id: 1 },
     });
     message = styleText(['black', 'bgWhite'], 'autohaus');
@@ -112,16 +112,10 @@ try {
     console.log(`${message} = %j`, autohaeuser);
     console.log();
 
-    // higher-order function und arrow function
-    const namenAutohaus = autohaeuser.map((a) => a.name);
-    message = styleText(['black', 'bgWhite'], 'namenAutohaus');
-    console.log(`${message} = %j`, namenAutohaus);
-    console.log();
-
-    // union type - Orte aus den Adressen
-    const orte = autohaeuser.flatMap((a) => a.adresse.map((ad) => ad.ort));
-    message = styleText(['black', 'bgWhite'], 'orte');
-    console.log(`${message} = %j`, orte);
+    // union type - Lämder aus den Adressen
+    const länder = autohaeuser.map((a) => a.adresse?.land);
+    message = styleText(['black', 'bgWhite'], 'länder');
+    console.log(`${message} = %j`, länder);
     console.log();
 
     // Pagination
