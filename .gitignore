@@ -18,7 +18,7 @@ tmp
 dependencies.svg
 
 # Sensible Daten (Passwort, Token, private Schluessel)
-extras/compose/buch/.env
+extras/compose/autohaus/.env
 extras/compose/keycloak/tls/key.pem
 extras/compose/postgres/password.txt
 extras/compose/postgres/init/tls/server.key

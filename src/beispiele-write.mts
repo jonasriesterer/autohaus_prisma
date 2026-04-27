@@ -69,7 +69,7 @@ const neuesAutohaus: Prisma.AutohausCreateInput = {
     gruendungsdatum: '2020-01-15',
     homepage: 'https://mein-autohaus.de',
     telefonnummer: '+49 123 456789',
-    // 1:N-Beziehung: Adressen
+    // 1:1-Beziehung: Adresse
     adresse: {
         create: [
             {

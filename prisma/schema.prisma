@@ -52,8 +52,8 @@ model Autohaus {
   telefonnummer    String?
   erzeugt          DateTime  @default(now()) @db.Timestamp(6)
   aktualisiert     DateTime  @default(now()) @db.Timestamp(6) @updatedAt
-  adresse          Adresse?
   autos            Auto[]
+  adresse          Adresse?
 
   @@index([name])
   @@map("autohaus")

@@ -59,7 +59,7 @@ const prisma = new PrismaClient({
     errorFormat: 'pretty',
     log,
     // Kommentar zu Log-Ausgabe:
-    // /*prismaQuery='Buch.findMany%3A...
+    // /*prismaQuery='Autohaus.findMany%3A...
     comments: [prismaQueryInsights()],
 });
 prisma.$on('query', (e) => {
@@ -72,7 +72,7 @@ prisma.$on('query', (e) => {
 export type AutohausMitAdresseUndAutos = Prisma.AutohausGetPayload<{
     include: {
         adresse: true;
-        auto: true;
+        autos: true;
     };
 }>;
 
@@ -81,8 +81,8 @@ try {
     await prisma.$connect();
 
     // Das Resultat ist null, falls kein Datensatz gefunden
-    const autohaus = await prisma.autohaus.findUnique({
-        where: { id: 1 },
+    const autohaus: Autohaus | null = await prisma.autohaus.findUnique({
+        where: { id: 100 },
     });
     message = styleText(['black', 'bgWhite'], 'autohaus');
     console.log(`${message} = %j`, autohaus);
@@ -91,7 +91,7 @@ try {
     // SELECT *
     // FROM   autohaus
     // JOIN   adresse ON autohaus.id = adresse.autohaus_id
-    // JOIN   auto ON autohaus.id = auto.autohaus_id
+    // JOIN   autos ON autohaus.id = autos.autohaus_id
     // WHERE  autohaus.name LIKE "%a%"
     const autohaeuser: AutohausMitAdresseUndAutos[] =
         await prisma.autohaus.findMany({
@@ -105,7 +105,7 @@ try {
             // Fetch-Join mit Adresse und Auto
             include: {
                 adresse: true,
-                auto: true,
+                autos: true,
             },
         });
     message = styleText(['black', 'bgWhite'], 'autohaeuser');
