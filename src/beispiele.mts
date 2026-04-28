@@ -112,10 +112,10 @@ try {
     console.log(`${message} = %j`, autohaeuser);
     console.log();
 
-    // union type - Lämder aus den Adressen
-    const länder = autohaeuser.map((a) => a.adresse?.land);
-    message = styleText(['black', 'bgWhite'], 'länder');
-    console.log(`${message} = %j`, länder);
+    // union type - PLZs aus den Adressen
+    const plzs = autohaeuser.map((a) => a.adresse?.plz);
+    message = styleText(['black', 'bgWhite'], 'plzs');
+    console.log(`${message} = %j`, plzs);
     console.log();
 
     // Pagination
