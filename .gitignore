@@ -22,6 +22,7 @@ extras/compose/autohaus/.env
 extras/compose/keycloak/tls/key.pem
 extras/compose/postgres/password.txt
 extras/compose/postgres/init/tls/server.key
+extras/compose/postgres/tls/
 extras/bruno/javascript/environments
 src/config/resources/tls/key.pem
 src/beispiele.ts
