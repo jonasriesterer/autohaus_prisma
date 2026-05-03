@@ -71,16 +71,14 @@ const neuesAutohaus: Prisma.AutohausCreateInput = {
     telefonnummer: '+49 123 456789',
     // 1:1-Beziehung: Adresse
     adresse: {
-        create: [
-            {
-                plz: '76133',
-                ort: 'Karlsruhe',
-                land: 'Deutschland',
-            },
-        ],
+        create: {
+            plz: '76133',
+            ort: 'Karlsruhe',
+            land: 'Deutschland',
+        },
     },
     // 1:N-Beziehung: Autos
-    auto: {
+    autos: {
         create: [
             {
                 kennzeichen: 'KA-XX-1001',
