@@ -66,7 +66,7 @@ const neuesAutohaus: Prisma.AutohausCreateInput = {
     // Spaltentyp "integer"
     anzahlFahrzeuge: 50,
     // Spaltentyp "date"
-    gruendungsdatum: '2020-01-15',
+    gruendungsdatum: new Date('1990-01-01'),
     homepage: 'https://mein-autohaus.de',
     telefonnummer: '+49 123 456789',
     // 1:1-Beziehung: Adresse
@@ -92,7 +92,7 @@ const neuesAutohaus: Prisma.AutohausCreateInput = {
 type AutohausCreated = Prisma.AutohausGetPayload<{
     include: {
         adresse: true;
-        auto: true;
+        autos: true;
     };
 }>;
 
@@ -111,7 +111,7 @@ try {
         // Neuer Datensatz mit generierter ID
         const autohausDb: AutohausCreated = await tx.autohaus.create({
             data: neuesAutohaus,
-            include: { adresse: true, auto: true },
+            include: { adresse: true, autos: true },
         });
         message = styleText(['black', 'bgWhite'], 'Generierte ID:');
         console.log(`${message} ${autohausDb.id}`);
@@ -120,7 +120,7 @@ try {
         // Version +1 wegen "Optimistic Locking" bzw. Vermeidung von "Lost Updates"
         const autohausUpdated: AutohausUpdated = await tx.autohaus.update({
             data: geaenderesAutohaus,
-            where: { id: 1 },
+            where: { id: autohausDb.id },
         });
         // eslint-disable-next-line require-atomic-updates
         message = styleText(['black', 'bgWhite'], 'Aktualisierte Version:');
@@ -129,7 +129,9 @@ try {
 
         // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/referential-actions#referential-action-defaults
         // https://www.prisma.io/docs/orm/prisma-schema/data-model/relations/relation-mode
-        const geloescht = await tx.autohaus.delete({ where: { id: 2 } });
+        const geloescht = await tx.autohaus.delete({
+            where: { id: autohausDb.id },
+        });
         // eslint-disable-next-line require-atomic-updates
         message = styleText(['black', 'bgWhite'], 'Geloescht:');
         console.log(`${message} ${geloescht.id}`);
