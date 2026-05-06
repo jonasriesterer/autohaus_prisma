@@ -20,31 +20,22 @@
 
 // Typdefinition für `find`
 export type Suchparameter = {
-    readonly isbn?: string;
-    readonly rating?: number | string;
-    readonly art?: Buchart;
-    readonly preis?: number;
-    readonly rabatt?: number;
-    readonly lieferbar?: boolean;
-    readonly datum?: string;
+    readonly name?: string;
+    readonly username?: string;
+    readonly email?: string;
+    readonly anzahlFahrzeuge?: number | string;
+    readonly gruendungsdatum?: string;
     readonly homepage?: string;
-    readonly javascript?: string;
-    readonly typescript?: string;
-    readonly java?: string;
-    readonly python?: string;
-    readonly titel?: string;
+    readonly telefonnummer?: string;
 };
 
 // gueltige Namen fuer die Suchparameter
 export const suchparameterNamen = [
-    'isbn',
-    'rating',
-    'art',
-    'preis',
-    'rabatt',
-    'lieferbar',
-    'datum',
+    'name',
+    'username',
+    'email',
+    'anzahlFahrzeuge',
+    'gruendungsdatum',
     'homepage',
-    'schlagwoerter',
-    'titel',
+    'telefonnummer',
 ];
