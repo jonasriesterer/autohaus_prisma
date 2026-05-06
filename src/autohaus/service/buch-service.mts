@@ -263,16 +263,4 @@ export class AutohausService {
 
         return validKeys;
     }
-
-    #checkEnums(suchparameter: Suchparameter) {
-        const { art } = suchparameter;
-        this.#logger.debug('#checkEnums: Suchparameter "art=%s"', art);
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        return (
-            art === undefined ||
-            art === 'EPUB' ||
-            art === 'HARDCOVER' ||
-            art === 'PAPERBACK'
-        );
-    }
 }
