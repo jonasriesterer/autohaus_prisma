@@ -13,69 +13,67 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
+import { PrismaClient } from '@prisma/client/extension';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { Prisma, PrismaClient } from '../../generated/prisma/client.ts';
-import { Buchart } from '../../generated/prisma/enums.ts';
 import {
-    type BuchMitTitelUndAbbildungen,
-    BuchService,
-} from './buch-service.mts';
+    AutohausMitAdresseUndAutos,
+    AutohausService,
+} from './autohaus-service.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { findUniqueMock } = vi.hoisted(() => ({
-    findUniqueMock: vi.fn<PrismaClient['buch']['findUnique']>(),
+    findUniqueMock: vi.fn<PrismaClient['autohaus']['findUnique']>(),
 }));
 
 // vi.mock() bewirkt Hoisting
 vi.mock('../../config/prisma-client.mts', () => ({
     prismaClient: {
-        buch: {
+        autohaus: {
             findUnique: findUniqueMock,
         },
     },
 }));
 
-describe('BuchService findById', () => {
-    let service: BuchService;
+describe('AutohausService findById', () => {
+    let service: AutohausService;
 
     beforeEach(() => {
-        service = new BuchService();
+        service = new AutohausService();
         findUniqueMock.mockReset();
     });
 
     test('id vorhanden', async () => {
         // given
         const id = 1;
-        const buchMock: Readonly<BuchMitTitelUndAbbildungen> = {
-            id,
+        const autohausMock: AutohausMitAdresseUndAutos = {
+            id: 1,
             version: 0,
-            isbn: '978-0-007-00644-1',
-            rating: 1,
-            art: Buchart.HARDCOVER,
-            preis: new Prisma.Decimal(1.1),
-            rabatt: new Prisma.Decimal(0.0123),
-            lieferbar: true,
-            datum: new Date(),
-            homepage: 'https://post.rest',
-            schlagwoerter: ['JAVASCRIPT'],
+            name: 'Mein Autohaus',
+            username: 'autohaus_user',
+            email: 'info@autohaus.de',
+            anzahlFahrzeuge: 42,
+            gruendungsdatum: new Date('1990-01-01'),
+            homepage: 'https://mein-autohaus.de',
+            telefonnummer: '+49 123 456789',
             erzeugt: new Date(),
             aktualisiert: new Date(),
-            titel: {
+            adresse: {
                 id: 11,
-                titel: 'Titel',
-                untertitel: 'Untertitel',
-                buchId: id,
+                plz: '76131',
+                ort: 'Karlsruhe',
+                land: 'Deutschland',
+                autohausId: 1,
             },
-            abbildungen: [],
+            autos: [],
         };
-        // return von prismaClient.buch.findUnique()
-        findUniqueMock.mockResolvedValueOnce(buchMock);
+        // return von prismaClient.autohaus.findUnique()
+        findUniqueMock.mockResolvedValueOnce(autohausMock);
 
         // when
-        const buch = await service.findById({ id });
+        const autohaus = await service.findById({ id });
 
         // then
-        expect(buch).toStrictEqual(buchMock);
+        expect(autohaus).toStrictEqual(autohausMock);
     });
 
     test('id nicht vorhanden', async () => {
@@ -85,7 +83,7 @@ describe('BuchService findById', () => {
 
         // when / then
         await expect(service.findById({ id })).rejects.toThrow(
-            `Es gibt kein Buch mit der ID ${id}.`,
+            `Es gibt kein Autohaus mit der ID ${id}.`,
         );
     });
 });
