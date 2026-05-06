@@ -24,15 +24,15 @@ import { getLogger } from '../../logger/logger.mts';
 import { createPageable } from '../service/pageable.mts';
 import { createPage } from './page.mts';
 
-const { buchService } = container;
+const { autohausService } = container;
 
 /**
- * Router für die Verwaltung von Bücher.
+ * Router für die Verwaltung von Autohäusern.
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const router = new Hono();
 
-const logger = getLogger('buch-router', 'file');
+const logger = getLogger('autohaus-router', 'file');
 
 // -----------------------------------------------------------------------------
 // S u c h e   m i t   P f a d - P a r a m e t e r
@@ -58,12 +58,12 @@ router.get('/:id', async (c) => {
         return c.notFound();
     }
 
-    const buch = await buchService.findById({ id: idNumber });
+    const autohaus = await autohausService.findById({ id: idNumber });
 
     // ETags
     // https://hono.dev/docs/api/request#header
     const ifNonMatch = req.header('If-None-Match');
-    const { version } = buch;
+    const { version } = autohaus;
     if (ifNonMatch === `"${version}"`) {
         logger.debug('get: Not Modified');
         // https://hono.dev/docs/api/context#body
@@ -75,8 +75,8 @@ router.get('/:id', async (c) => {
     const { header, json } = c;
     header('ETag', `"${version}"`);
 
-    logger.debug('get: %o', buch);
-    return json(buch);
+    logger.debug('get: %o', autohaus);
+    return json(autohaus);
 });
 
 // -----------------------------------------------------------------------------
@@ -97,7 +97,7 @@ router.get('/', async (c) => {
     const queryParams = req.query();
     const countOnly = queryParams['count-only'];
     if (countOnly !== undefined) {
-        const count = await buchService.count();
+        const count = await autohausService.count();
         logger.debug('get: count=%d', count);
         return c.json({ count });
     }
@@ -113,10 +113,10 @@ router.get('/', async (c) => {
     );
 
     const pageable = createPageable({ number: page, size });
-    const buecherSlice = await buchService.find(queryParams, pageable); // NOSONAR
-    const buchPage = createPage(buecherSlice, pageable);
-    logger.debug('get: buchPage=%o', buchPage);
-    return c.json(buchPage);
+    const autohaeuserSlice = await autohausService.find(queryParams, pageable); // NOSONAR
+    const autohausPage = createPage(autohaeuserSlice, pageable);
+    logger.debug('get: autohausPage=%o', autohausPage);
+    return c.json(autohausPage);
 });
 
 // -----------------------------------------------------------------------------
@@ -130,12 +130,12 @@ router.get('/file/:id', async (c) => {
         return c.notFound();
     }
 
-    const buchFile = await buchService.findFileByBuchId(idNumber);
-    if (buchFile === undefined) {
+    const autohausFile = await autohausService.findFileByAutohausId(idNumber);
+    if (autohausFile === undefined) {
         return c.notFound();
     }
 
-    return c.body(buchFile.data, {
-        headers: { 'Content-Type': buchFile.mimetype ?? '' },
+    return c.body(autohausFile.data, {
+        headers: { 'Content-Type': autohausFile.mimetype ?? '' },
     });
 });

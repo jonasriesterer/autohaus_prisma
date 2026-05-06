@@ -13,12 +13,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
-import { BuchService } from './buch/service/buch-service.mts';
+import { AutohausService } from './autohaus/service/autohaus-service.mts';
 import { BuchWriteService } from './buch/service/buch-write-service.mts';
 import { DbPopulateService } from './config/dev/db-populate.mts';
 import { KeycloakService } from './security/keycloak-service.mts';
 
-const buchService = new BuchService();
+const autohausService = new AutohausService();
 
 /**
  * Container mit Singletons zur Emulation von manueller DI (ähnlich wie ein
@@ -27,7 +27,7 @@ const buchService = new BuchService();
  * @author [Jürgen Zimmermann](mailto:Juergen.Zimmermann@h-ka.de)
  */
 export const container = {
-    buchService,
+    autohausService,
     buchWriteService: new BuchWriteService(buchService),
     keycloakService: new KeycloakService(),
     dbPopulateService: new DbPopulateService(),
