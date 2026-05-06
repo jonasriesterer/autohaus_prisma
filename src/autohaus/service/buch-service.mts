@@ -171,7 +171,7 @@ export class AutohausService {
         }
 
         // Falsche Namen fuer Suchparameter?
-        if (!this.#checkKeys(keys) || !this.#checkEnums(suchparameter)) {
+        if (!this.#checkKeys(keys)) {
             this.#logger.debug('Ungueltige Suchparameter');
             throw new NotFoundError('Ungueltige Suchparameter');
         }
