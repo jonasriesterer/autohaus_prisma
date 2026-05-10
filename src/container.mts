@@ -14,7 +14,7 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 import { AutohausService } from './autohaus/service/autohaus-service.mts';
-import { BuchWriteService } from './buch/service/buch-write-service.mts';
+import { AutohausWriteService } from './autohaus/service/autohaus-write-service.mts';
 import { DbPopulateService } from './config/dev/db-populate.mts';
 import { KeycloakService } from './security/keycloak-service.mts';
 
@@ -28,7 +28,7 @@ const autohausService = new AutohausService();
  */
 export const container = {
     autohausService,
-    buchWriteService: new BuchWriteService(buchService),
+    autohausWriteService: new AutohausWriteService(autohausService),
     keycloakService: new KeycloakService(),
     dbPopulateService: new DbPopulateService(),
 };
