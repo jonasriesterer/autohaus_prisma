@@ -28,7 +28,6 @@ import { getLogger } from '../../logger/logger.mts';
 import { sendmail } from '../../mail/sendmail.mts';
 import { AutohausService } from './autohaus-service.mts';
 import {
-    IsbnExistsError,
     NotFoundError,
     VersionInvalidError,
     VersionOutdatedError,
@@ -81,7 +80,6 @@ export class AutohausWriteService {
      */
     async create(autohaus: AutohausCreate) {
         this.#logger.debug('create: autohaus=%o', autohaus);
-        await this.#validateCreate(autohaus);
 
         // Neuer Datensatz mit generierter ID
         let autohausDb: AutohausCreated | undefined;
@@ -229,23 +227,6 @@ export class AutohausWriteService {
 
         this.#logger.debug('delete');
         return true;
-    }
-
-    async #validateCreate({
-        isbn,
-    }: Prisma.AutohausCreateInput): Promise<undefined> {
-        this.#logger.debug('#validateCreate: isbn=%s', isbn);
-        if (isbn === undefined) {
-            this.#logger.debug('#validateCreate: ok');
-            return;
-        }
-
-        const anzahl = await prismaClient.autohaus.count({ where: { isbn } });
-        if (anzahl > 0) {
-            this.#logger.debug('#validateCreate: isbn existiert: %s', isbn);
-            throw new IsbnExistsError(isbn);
-        }
-        this.#logger.debug('#validateCreate: ok');
     }
 
     async #sendmail({ id, name }: { id: number | 'N/A'; name: string }) {

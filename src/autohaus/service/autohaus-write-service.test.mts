@@ -15,15 +15,17 @@
 
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 import { Prisma } from '../../generated/prisma/client.ts';
-import { Buchart } from '../../generated/prisma/enums.ts';
-import { BuchService } from './buch-service.mts';
-import { type BuchCreate, BuchWriteService } from './buch-write-service.mts';
+import { AutohausService } from './autohaus-service.mts';
+import {
+    AutohausCreate,
+    AutohausWriteService,
+} from './autohaus-write-service.mts';
 
 // Hoisting: wird an den (Datei-) Anfang verschoben
 const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(
     () => ({
-        createMock: vi.fn<Prisma.BuchDelegate['create']>(),
-        countMock: vi.fn<Prisma.BuchDelegate['count']>(),
+        createMock: vi.fn<Prisma.AutohausDelegate['create']>(),
+        countMock: vi.fn<Prisma.AutohausDelegate['count']>(),
         transactionMock: vi.fn(), // eslint-disable-line vitest/require-mock-type-parameters
         sendmailMock: vi.fn(),
     }),
@@ -32,7 +34,7 @@ const { createMock, countMock, transactionMock, sendmailMock } = vi.hoisted(
 // vi.mock() bewirkt Hoisting
 vi.mock('../../config/prisma-client.mts', () => ({
     prismaClient: {
-        buch: {
+        autohaus: {
             create: createMock,
             count: countMock,
         },
@@ -44,22 +46,22 @@ vi.mock('../../mail/sendmail.mts', () => ({
     sendmail: sendmailMock,
 }));
 
-describe('BuchWriteService create', () => {
-    let service: BuchWriteService;
-    let readService: BuchService;
+describe('AutohausWriteService create', () => {
+    let service: AutohausWriteService;
+    let readService: AutohausService;
 
     beforeEach(() => {
-        readService = new BuchService();
-        service = new BuchWriteService(readService);
+        readService = new AutohausService();
+        service = new AutohausWriteService(readService);
 
         createMock.mockReset();
         countMock.mockReset();
         transactionMock.mockReset();
         sendmailMock.mockReset();
 
-        transactionMock.mockImplementation(async (callback) => {
+        transactionMock.mockImplementation(async (callback: any) => {
             return callback({
-                buch: {
+                autohaus: {
                     create: createMock,
                     count: countMock,
                 },
@@ -67,37 +69,33 @@ describe('BuchWriteService create', () => {
         });
     });
 
-    test('Neues Buch', async () => {
+    test('Neues Autohaus', async () => {
         // given
         const idMock = 1;
-        const buch: BuchCreate = {
-            isbn: '978-0-007-00644-1',
-            rating: 1,
-            art: Buchart.HARDCOVER,
-            preis: new Prisma.Decimal(1.1),
-            rabatt: new Prisma.Decimal(0.0123),
-            lieferbar: true,
-            datum: new Date(),
-            homepage: 'https://post.rest',
-            schlagwoerter: ['JAVASCRIPT'],
-            titel: {
+        const autohaus: AutohausCreate = {
+            name: 'Autohaus Name',
+            username: 'username',
+            email: 'email@example.com',
+            anzahlFahrzeuge: 10,
+            gruendungsdatum: new Date(),
+            adresse: {
                 create: {
-                    titel: 'Titel',
-                    untertitel: 'Untertitel',
+                    plz: 'PLZ',
+                    ort: 'Ort',
+                    land: 'Deutschland',
                 },
             },
         };
-        const buchTmp: any = { ...buch };
-        buchTmp.id = idMock;
-        buchTmp.titel.create.id = 11;
-        buchTmp.titel.create.buchId = idMock;
-        // return von tx.buch.create()
-        createMock.mockResolvedValue(buchTmp);
+        const autohausTmp: any = { ...autohaus };
+        autohausTmp.id = idMock;
+        autohausTmp.adresse.create.autohausId = idMock;
+        // return von tx.autohaus.create()
+        createMock.mockResolvedValue(autohausTmp);
         // sendmail ist eine void-Funktion
         sendmailMock.mockResolvedValue(undefined);
 
         // when
-        const id = await service.create(buch);
+        const id = await service.create(autohaus);
 
         // then
         expect(id).toBe(idMock);
