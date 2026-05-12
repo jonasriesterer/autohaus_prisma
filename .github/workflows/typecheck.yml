@@ -43,14 +43,14 @@ jobs:
       - name: Run typecheck
         run: bunx tsc
 
-      - name: Run typecheck
+      - name: Oudated dependencies
         run: bun outdated
 
-      - name: Run typecheck
+      - name: Audit
         run: bun audit
 
-      - name: Run typecheck
+      - name: Run Eslint
         run: bun run eslint
 
-      - name: Run typecheck
+      - name: Run Prettier
         run: bun run prettier
