@@ -21,15 +21,14 @@ import { createMiddleware } from 'hono/factory';
 import { secureHeaders } from 'hono/secure-headers';
 import { type ZodError } from 'zod';
 import { router as healthRouter } from './admin/health-router.mts';
-import { graphqlApp } from './buch/graphql/graphql-app.mts';
-import { router } from './buch/router/buch-router.mts';
-import { router as buchWriteRouter } from './buch/router/buch-write-router.mts';
+import { router } from './autohaus/router/autohaus-router.mts';
+import { router as autohausWriteRouter } from './autohaus/router/autohaus-write-router.mts';
 import {
     IsbnExistsError,
     NotFoundError,
     VersionInvalidError,
     VersionOutdatedError,
-} from './buch/service/errors.mts';
+} from './autohaus/service/errors.mts';
 import { corsOptions } from './config/cors.mts';
 import { router as devRouter } from './config/dev/dev-router.mts';
 import { env } from './config/env.mts';
@@ -87,11 +86,9 @@ if (logger.isLevelEnabled('debug')) {
 // R o u t e n
 // -----------------------------------------------------------------------------
 app.route(paths.rest, router);
-app.route(paths.rest, buchWriteRouter);
+app.route(paths.rest, autohausWriteRouter);
 app.route(paths.health, healthRouter);
 app.route(paths.auth, authRouter);
-// Yoga baut eine Hono-App mit Basispfad "/graphql"
-app.route('/', graphqlApp);
 app.route('/prometheus', prometheusRouter);
 
 const { NODE_ENV } = env;
@@ -112,7 +109,7 @@ if (logger.isLevelEnabled('debug')) {
 app.onError((error, c) => {
     if (error instanceof NotFoundError) {
         // https://hono.dev/docs/api/context#notfound
-        return c.notFound() as Response;
+        return c.notFound();
     }
 
     if (error.name === 'ZodError') {
