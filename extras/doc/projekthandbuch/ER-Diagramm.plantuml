@@ -20,44 +20,45 @@
 ' hide the spot
 hide circle
 
-' evtl. Prbleme mit Kraehenfuessen vermeiden
+' evtl. Probleme mit Kraehenfuessen vermeiden
 skinparam linetype ortho
 
-entity "Buch" {
+entity "Autohaus" {
   * id: integer <<generated>>
   --
   * version: integer
-  * isbn: text
-  * rating: number
-  * art: text
-  * preis: number
-  * rabatt: number
-  * lieferbar: boolean
-    datum: date
+  * name: text
+  * username: text
+  * email: text
+  * anzahl_fahrzeuge: integer
+  * gruendungsdatum: date
     homepage: text
-  * **titel_id**: integer <<FK>>
-    schlagwoerter: text
+    telefonnummer: text
   * erzeugt: timestamp
   * aktualisiert: timestamp
 }
 
-entity "Titel" {
+entity "Adresse" {
   * id: integer <<generated>>
   --
-  * titel: text
-    untertitel: text
+  * plz: text
+  * ort: text
+  * land: text
+  * **autohaus_id**: integer <<FK>>
 }
 
-entity "Abbildung" {
+entity "Auto" {
   * id: integer <<generated>>
   --
-  * beschriftung: text
-    contentType: text
-  * **buch_id**: integer <<FK>>
+  * kennzeichen: text
+  * marke: text
+  * modell: text
+  * baujahr: integer
+  * **autohaus_id**: integer <<FK>>
 }
 
-Buch ||..|| Titel
-Buch ||..o{ Abbildung
+Autohaus ||--o{ Auto
+Autohaus ||--|| Adresse
 
 footer (c) Jürgen Zimmermann
 
