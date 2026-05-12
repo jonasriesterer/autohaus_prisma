@@ -44,10 +44,10 @@ jobs:
         run: bunx tsc
 
       - name: Run typecheck
-        run: bunx outdated
+        run: bun outdated
 
       - name: Run typecheck
-        run: bunx audit
+        run: bun audit
 
       - name: Run typecheck
         run: bun run eslint
