@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": [
+    "script.ts"
+  ],
+  "compilerOptions": {
+    "isolatedModules": true,
+    "lib": ["ES2024", "dom"]
+  }
+}
