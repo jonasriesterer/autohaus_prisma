@@ -1,5 +1,5 @@
 info:
-  name: Buch 30 ändern
+  name: Autohaus 30 ändern
   type: http
   seq: 1
 
@@ -17,15 +17,13 @@ http:
     type: json
     data: |
       {
-        "isbn": "978-0-201-63361-0",
-        "rating": 5,
-        "art": "HARDCOVER",
-        "preis": 3333,
-        "rabatt": 0.33,
-        "lieferbar": true,
-        "datum": "2025-03-03T00:00:00Z",
-        "homepage": "https://put.rest",
-        "schlagwoerter": ["JAVASCRIPT"]
+        "name": "Autohaus Karlsruhe",
+        "username": "autohaus_ka",
+        "email": "info@autohaus.de",
+        "anzahlFahrzeuge": 42,
+        "gruendungsdatum": "2024-05-01",
+        "homepage": "https://www.autohaus.de",
+        "telefonnummer": "+49 721 1234567"
       }
   auth: inherit
 
