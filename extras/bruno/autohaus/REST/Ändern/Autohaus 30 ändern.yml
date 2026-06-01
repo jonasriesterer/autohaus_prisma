@@ -1,5 +1,5 @@
 info:
-  name: Autohaus 30 ändern
+  name: Autohaus 1 ändern
   type: http
   seq: 1
 
@@ -11,7 +11,7 @@ http:
       value: '"0"'
   params:
     - name: id
-      value: "30"
+      value: "1"
       type: path
   body:
     type: json

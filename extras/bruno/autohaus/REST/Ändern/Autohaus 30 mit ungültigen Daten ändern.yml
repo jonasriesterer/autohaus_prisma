@@ -1,5 +1,5 @@
 info:
-  name: Autohaus 30 mit ungültigen Daten ändern
+  name: Autohaus 1 mit ungültigen Daten ändern
   type: http
   seq: 6
 
@@ -11,7 +11,7 @@ http:
       value: '"0"'
   params:
     - name: id
-      value: "30"
+      value: "1"
       type: path
   body:
     type: json
