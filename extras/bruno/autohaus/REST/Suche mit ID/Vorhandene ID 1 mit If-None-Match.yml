@@ -1,5 +1,5 @@
 info:
-  name: Vorhandene ID 1 mit If-None-Match
+  name: Vorhandene ID 100 mit If-None-Match
   type: http
   seq: 2
 
@@ -13,7 +13,7 @@ http:
       value: '"0"'
   params:
     - name: id
-      value: "1"
+      value: "100"
       type: path
   auth: inherit
 

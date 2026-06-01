@@ -1,5 +1,5 @@
 info:
-  name: Vorhandene ID 1
+  name: Vorhandene ID 100
   type: http
   seq: 1
 
@@ -11,7 +11,7 @@ http:
       value: application/json
   params:
     - name: id
-      value: "1"
+      value: "100"
       type: path
   auth: inherit
 
@@ -25,7 +25,7 @@ runtime:
       value: ^application\/json(; charset=utf-8)?$
     - expression: res.body.id
       operator: eq
-      value: "1"
+      value: "100"
 
 settings:
   encodeUrl: true
