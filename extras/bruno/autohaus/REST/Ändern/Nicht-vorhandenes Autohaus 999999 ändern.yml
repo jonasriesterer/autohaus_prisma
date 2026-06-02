@@ -23,7 +23,12 @@ http:
         "anzahlFahrzeuge": 42,
         "gruendungsdatum": "2024-05-01",
         "homepage": "https://www.autohaus.de",
-        "telefonnummer": "+49 721 1234567"
+        "telefonnummer": "+49 721 1234567",
+        "adresse": {
+          "plz": "76131",
+          "ort": "Karlsruhe",
+          "land": "Deutschland"
+        }
       }
   auth: inherit
 

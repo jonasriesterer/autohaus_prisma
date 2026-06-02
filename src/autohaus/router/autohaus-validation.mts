@@ -67,12 +67,19 @@ export const AutohausNeuSchema = z
     })
     .readonly();
 
-export const AutohausUpdateSchema = AutohausComplete.omit({
-    id: true,
-    version: true,
-    adresse: true,
-    autos: true,
-}).readonly();
+export const AutohausUpdateSchema = z
+    .strictObject({
+        name: z.string().min(1).max(100).optional(),
+        username: z.string().min(1).max(50).optional(),
+        email: z.string().email().optional(),
+        anzahlFahrzeuge: z.number().int().gte(0).optional(),
+        gruendungsdatum: z.coerce.date().optional(),
+        homepage: z.httpUrl().optional(),
+        telefonnummer: z.string().min(1).max(32).optional(),
+        adresse: AdresseNeuSchema.optional(),
+        autos: z.array(AutoSchema).optional(),
+    })
+    .readonly();
 
 export const AutohausUpdateGraphQLSchema = AutohausComplete.omit({
     adresse: true,
