@@ -157,16 +157,31 @@ router.put('/:id', rolesRequired('admin', 'user'), async (c) => {
 const autohausDtoToAutohausUpdate = (
     autohausDTO: AutohausUpdateType,
 ): AutohausUpdate => {
-    return {
+    const autohaus: AutohausUpdate = {
         version: 0,
-        name: autohausDTO.name,
-        username: autohausDTO.username,
-        email: autohausDTO.email,
-        anzahlFahrzeuge: autohausDTO.anzahlFahrzeuge,
-        gruendungsdatum: autohausDTO.gruendungsdatum,
-        homepage: autohausDTO.homepage ?? null,
-        telefonnummer: autohausDTO.telefonnummer ?? null,
+        ...(autohausDTO.name !== undefined
+            ? { name: autohausDTO.name }
+            : undefined),
+        ...(autohausDTO.username !== undefined
+            ? { username: autohausDTO.username }
+            : undefined),
+        ...(autohausDTO.email !== undefined
+            ? { email: autohausDTO.email }
+            : undefined),
+        ...(autohausDTO.anzahlFahrzeuge !== undefined
+            ? { anzahlFahrzeuge: autohausDTO.anzahlFahrzeuge }
+            : undefined),
+        ...(autohausDTO.gruendungsdatum !== undefined
+            ? { gruendungsdatum: autohausDTO.gruendungsdatum }
+            : undefined),
+        ...(autohausDTO.homepage !== undefined
+            ? { homepage: autohausDTO.homepage }
+            : undefined),
+        ...(autohausDTO.telefonnummer !== undefined
+            ? { telefonnummer: autohausDTO.telefonnummer }
+            : undefined),
     };
+    return autohaus;
 };
 
 // -----------------------------------------------------------------------------
