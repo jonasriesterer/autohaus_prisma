@@ -21,7 +21,8 @@
 import process from 'node:process';
 import { styleText } from 'node:util';
 
-const { NODE_ENV, CLIENT_SECRET, LOG_LEVEL } = process.env;
+const { NODE_ENV: nodeEnv, BUN_ENV, CLIENT_SECRET, LOG_LEVEL } = process.env;
+const NODE_ENV = nodeEnv ?? BUN_ENV;
 
 // "as const" fuer readonly
 // https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions

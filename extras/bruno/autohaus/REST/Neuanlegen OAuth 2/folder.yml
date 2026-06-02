@@ -19,6 +19,16 @@ request:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false
+  variables:
+    - name: username
+      value: admin
+    - name: password
+      value: p
+    - name: clientId
+      value: javascript-client
+    - name: clientSecret
+      value: 0GzEhEG6MUnn0WqpgMHpTWH7tvMQzC3m
