@@ -1,7 +1,7 @@
 opencollection: 1.0.0
 
 info:
-  name: autohaus
+  name: autohaus_prisma
 config:
   proxy:
     inherit: true
