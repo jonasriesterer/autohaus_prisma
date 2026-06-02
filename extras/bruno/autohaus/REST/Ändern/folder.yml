@@ -31,7 +31,7 @@ request:
     - name: clientId
       value: javascript-client
     - name: clientSecret
-      value: Pw1Q6cLQ8LwDtNB8wvkA6lBXGRVOulEu
+      value: 0GzEhEG6MUnn0WqpgMHpTWH7tvMQzC3m
 
 docs:
   content: Über die REST-Schnittstelle vorhandene Autohäuser ändern
