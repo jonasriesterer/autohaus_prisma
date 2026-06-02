@@ -22,6 +22,13 @@ const AdresseSchema = z.strictObject({
     autohausId: z.number().int().gt(0),
 });
 
+// Für neue Adressen: autohausId wird vom Server gesetzt, nicht vom Client
+const AdresseNeuSchema = z.strictObject({
+    plz: z.string().regex(/^[0-9]{5}$/, 'Ungültige PLZ'),
+    ort: z.string().min(1).max(64),
+    land: z.string().min(1).max(64),
+});
+
 const AutoSchema = z.strictObject({
     kennzeichen: z.string().min(1).max(16),
     marke: z.string().min(1).max(40),
@@ -46,10 +53,19 @@ const AutohausComplete = z.strictObject({
     autos: z.array(AutoSchema).optional(),
 });
 
-export const AutohausNeuSchema = AutohausComplete.omit({
-    id: true,
-    version: true,
-}).readonly();
+export const AutohausNeuSchema = z
+    .strictObject({
+        name: z.string().min(1).max(100),
+        username: z.string().min(1).max(50),
+        email: z.string().email(),
+        anzahlFahrzeuge: z.number().int().gte(0),
+        gruendungsdatum: z.coerce.date(),
+        homepage: z.httpUrl().optional(),
+        telefonnummer: z.string().min(1).max(32).optional(),
+        adresse: AdresseNeuSchema.optional(),
+        autos: z.array(AutoSchema).optional(),
+    })
+    .readonly();
 
 export const AutohausUpdateSchema = AutohausComplete.omit({
     id: true,

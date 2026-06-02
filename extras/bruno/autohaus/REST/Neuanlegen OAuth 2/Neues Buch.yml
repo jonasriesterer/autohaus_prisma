@@ -24,8 +24,7 @@ http:
         "adresse": {
           "plz": "10115",
           "ort": "Berlin",
-          "land": "Deutschland",
-          "autohausId": 1
+          "land": "Deutschland"
         },
         "autos": [
           {
