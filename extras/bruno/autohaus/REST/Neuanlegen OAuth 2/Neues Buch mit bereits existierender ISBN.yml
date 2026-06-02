@@ -1,0 +1,64 @@
+info:
+  name: Neues Autohaus mit zusätzlichem Auto
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Autohaus München",
+        "username": "autohaus_muenchen",
+        "email": "kontakt@autohaus-muenchen.de",
+        "anzahlFahrzeuge": 10,
+        "gruendungsdatum": "2022-03-10",
+        "homepage": "https://autohaus-muenchen.de",
+        "telefonnummer": "+49 89 9876543",
+        "adresse": {
+          "plz": "80331",
+          "ort": "München",
+          "land": "Deutschland",
+          "autohausId": 1
+        },
+        "autos": [
+          {
+            "kennzeichen": "M-AB1234",
+            "marke": "Mercedes",
+            "modell": "C-Klasse",
+            "baujahr": 2021
+          },
+          {
+            "kennzeichen": "M-CD5678",
+            "marke": "Volkswagen",
+            "modell": "Golf",
+            "baujahr": 2020
+          }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: /rest\/[1-9]\d*$/
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

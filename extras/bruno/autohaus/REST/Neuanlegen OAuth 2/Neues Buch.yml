@@ -1,0 +1,58 @@
+info:
+  name: Neues Autohaus
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{restUrl}}"
+  headers:
+    - name: ""
+      value: ""
+      disabled: true
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Autohaus Berlin",
+        "username": "autohaus_berlin",
+        "email": "kontakt@autohaus-berlin.de",
+        "anzahlFahrzeuge": 5,
+        "gruendungsdatum": "2024-01-15",
+        "homepage": "https://autohaus-berlin.de",
+        "telefonnummer": "+49 30 1234567",
+        "adresse": {
+          "plz": "10115",
+          "ort": "Berlin",
+          "land": "Deutschland",
+          "autohausId": 1
+        },
+        "autos": [
+          {
+            "kennzeichen": "B-AB123",
+            "marke": "BMW",
+            "modell": "i4",
+            "baujahr": 2023
+          }
+        ]
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "201"
+    - expression: res.headers.location
+      operator: matches
+      value: /rest\/[1-9]\d*$
+    - expression: res.body
+      operator: isString
+    - expression: res.body
+      operator: isEmpty
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
