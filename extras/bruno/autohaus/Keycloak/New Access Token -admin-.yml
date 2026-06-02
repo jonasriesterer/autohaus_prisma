@@ -21,6 +21,15 @@ http:
         value: "{{clientSecret}}"
 
 runtime:
+  variables:
+    - name: username
+      value: admin
+    - name: password
+      value: p
+    - name: clientId
+      value: javascript-client
+    - name: clientSecret
+      value: Pw1Q6cLQ8LwDtNB8wvkA6lBXGRVOulEu
   assertions:
     - expression: res.status
       operator: eq

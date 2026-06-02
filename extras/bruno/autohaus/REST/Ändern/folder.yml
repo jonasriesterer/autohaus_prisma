@@ -19,9 +19,19 @@ request:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false
+  variables:
+    - name: username
+      value: admin
+    - name: password
+      value: p
+    - name: clientId
+      value: javascript-client
+    - name: clientSecret
+      value: Pw1Q6cLQ8LwDtNB8wvkA6lBXGRVOulEu
 
 docs:
   content: Über die REST-Schnittstelle vorhandene Autohäuser ändern

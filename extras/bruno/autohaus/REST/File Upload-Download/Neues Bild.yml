@@ -20,7 +20,7 @@ http:
       - name: file
         type: file
         value:
-          - C:\workspace\javascript\hono\extras\bruno\logo.png
+          - C:\Users\riest\VSCodeProjects\autohaus_prisma\extras\bruno\logo.png
   auth:
     type: oauth2
     flow: resource_owner_password_credentials
@@ -36,11 +36,21 @@ http:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false
 
 runtime:
+  variables:
+    - name: username
+      value: admin
+    - name: password
+      value: p
+    - name: clientId
+      value: javascript-client
+    - name: clientSecret
+      value: Pw1Q6cLQ8LwDtNB8wvkA6lBXGRVOulEu
   assertions:
     - expression: res.status
       operator: eq
