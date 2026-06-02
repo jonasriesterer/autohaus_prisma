@@ -1,5 +1,5 @@
 info:
-  name: Autohaus 1 löschen
+  name: Autohaus 100 löschen
   type: http
   seq: 1
 
@@ -8,7 +8,7 @@ http:
   url: "{{restUrl}}/:id"
   params:
     - name: id
-      value: "1"
+      value: "100"
       type: path
   body:
     type: json
