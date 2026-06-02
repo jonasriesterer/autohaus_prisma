@@ -1,0 +1,40 @@
+info:
+  name: Nicht-vorhandenes Autohaus 999999 ändern
+  type: http
+  seq: 5
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"0"'
+  params:
+    - name: id
+      value: "999999"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Autohaus Karlsruhe",
+        "username": "autohaus_ka",
+        "email": "info@autohaus.de",
+        "anzahlFahrzeuge": 42,
+        "gruendungsdatum": "2024-05-01",
+        "homepage": "https://www.autohaus.de",
+        "telefonnummer": "+49 721 1234567"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "404"
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

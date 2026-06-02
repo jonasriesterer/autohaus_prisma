@@ -1,0 +1,49 @@
+info:
+  name: Autohaus 1 mit alter Versionsnummer ändern
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{restUrl}}/:id"
+  headers:
+    - name: If-Match
+      value: '"-1"'
+  params:
+    - name: id
+      value: "1"
+      type: path
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Autohaus Karlsruhe",
+        "username": "autohaus_ka",
+        "email": "info@autohaus.de",
+        "anzahlFahrzeuge": 42,
+        "gruendungsdatum": "2024-05-01",
+        "homepage": "https://www.autohaus.de",
+        "telefonnummer": "+49 721 1234567"
+      }
+  auth: inherit
+
+runtime:
+  assertions:
+    - expression: res.status
+      operator: eq
+      value: "412"
+    - expression: res.headers['content-type']
+      operator: eq
+      value: application/problem+json
+    - expression: res.body.statusCode
+      operator: eq
+      value: "412"
+    - expression: res.body.detail
+      operator: contains
+      value: ETag
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
