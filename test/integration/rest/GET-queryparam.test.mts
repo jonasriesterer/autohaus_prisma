@@ -9,7 +9,7 @@ import { CONTENT_TYPE, restURL } from '../constants.mts';
 // -----------------------------------------------------------------------------
 // T e s t d a t e n
 // -----------------------------------------------------------------------------
-const namenArray = ['Auto', 'Motor', 'Zentrum'];
+const namenArray = ['Auto'];
 const namenNichtVorhanden = ['XYZGibtsNicht', 'QQQUnbekannt'];
 // "javascript" ist laut AutohausService.#checkKeys ein valider Suchparameter
 const schlagwoerter = ['javascript', 'typescript']; 

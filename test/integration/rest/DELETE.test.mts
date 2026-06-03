@@ -1,0 +1,97 @@
+// oxlint-disable max-lines-per-function
+// Copyright (C) 2025 - present Juergen Zimmermann, Hochschule Karlsruhe
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+import { beforeAll, describe, expect, test } from 'vitest';
+import { AUTHORIZATION, BEARER, DELETE, restURL } from '../constants.mts';
+import { getToken } from '../token.mts';
+
+// -----------------------------------------------------------------------------
+// T e s t d a t e n
+// -----------------------------------------------------------------------------
+const id = '101'; // <- ID auf DB anpassen
+
+// -----------------------------------------------------------------------------
+// T e s t s
+// -----------------------------------------------------------------------------
+// Test-Suite
+describe('DELETE /rest', () => {
+    let token: string;
+    let tokenUser: string;
+
+    beforeAll(async () => {
+        token = await getToken('admin', 'p');
+        tokenUser = await getToken('user', 'p');
+    });
+
+    test.concurrent('Vorhandenes Autohaus loeschen', async () => {
+        // given
+        const url = `${restURL}/${id}`;
+        const headers = new Headers();
+        headers.append(AUTHORIZATION, `${BEARER} ${token}`);
+
+        // when
+        const { status } = await fetch(url, {
+            method: DELETE,
+            headers,
+        });
+
+        // then
+        expect(status).toBe(204);
+    });
+
+    test.concurrent('Autohaus loeschen, aber ohne Token', async () => {
+        // given
+        const url = `${restURL}/${id}`;
+
+        // when
+        const { status } = await fetch(url, { method: DELETE });
+
+        // then
+        expect(status).toBe(401);
+    });
+
+    test.concurrent('Autohaus loeschen, aber mit falschem Token', async () => {
+        // given
+        const url = `${restURL}/${id}`;
+        const headers = new Headers();
+        headers.append(AUTHORIZATION, `${BEARER} FALSCHER_TOKEN`);
+
+        // when
+        const { status } = await fetch(url, {
+            method: DELETE,
+            headers,
+        });
+
+        // then
+        expect(status).toBe(401);
+    });
+
+    test.concurrent('Vorhandenes Autohaus als "user" loeschen', async () => {
+        // given
+        const url = `${restURL}/102`; // <- ID auf DB anpassen
+        const headers = new Headers();
+        headers.append(AUTHORIZATION, `${BEARER} ${tokenUser}`);
+
+        // when
+        const { status } = await fetch(url, {
+            method: DELETE,
+            headers,
+        });
+
+        // then
+        expect(status).toBe(403);
+    });
+});
