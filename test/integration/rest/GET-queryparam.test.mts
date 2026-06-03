@@ -58,6 +58,7 @@ describe('GET /rest', () => {
             expect(headers.get(CONTENT_TYPE)).toMatch(/json/iu);
 
             const body = (await response.json()) as Page<AutohausMitAdresse>;
+
             expect(body).toBeDefined();
 
             body.content

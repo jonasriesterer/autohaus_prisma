@@ -78,6 +78,7 @@ describe('GET /rest/:id', () => {
             expect(status).toBe(304);
 
             const body = await response.text();
+
             expect(body).toBe('');
         },
     );

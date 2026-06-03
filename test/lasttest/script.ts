@@ -10,12 +10,12 @@ import http from 'k6/http';
 
 const baseUrl = 'https://localhost:3000';
 // Den Pfad ggf. anpassen, falls der Router unter z.B. /autohaeuser statt /rest gemountet ist
-const restUrl = `${baseUrl}/rest`; 
+const restUrl = `${baseUrl}/rest`;
 const tokenUrl = `${baseUrl}/auth/token`;
 const dbPopulateUrl = `${baseUrl}/dev/db_populate`;
 
 // Beispieldaten, die zu deiner Autohaus-Datenbank passen sollten
-const ids = [1, 2, 3, 4, 5]; 
+const ids = [1, 2, 3, 4, 5];
 const namenArray = ['Alpha', 'Beta', 'Gamma']; // Beispiel-Namen für Suchparameter
 const namenNichtVorhanden = ['XYZ_GibtsNicht', 'QQQ_Unbekannt'];
 
@@ -33,7 +33,7 @@ export function setup() {
     const tokenResponse = http.post<'text'>(tokenUrl, body, {
         headers: tokenHeaders,
     });
-    
+
     let token: string;
     if (tokenResponse.status === 200) {
         token = JSON.parse(tokenResponse.body).access_token;
@@ -115,7 +115,7 @@ export const options: Options = {
             key,
         },
     ],
-    tlsVersion: http.TLS_1_3, 
+    tlsVersion: http.TLS_1_3,
     insecureSkipTLSVerify: true,
 };
 
@@ -131,7 +131,7 @@ export function getById() {
     const { status, headers } = response;
     expect(status).toBe(200);
     expect(headers['Content-Type']).toContain('application/json');
-    sleep(1); 
+    sleep(1);
 }
 
 // Testet GET /:id mit ETag (304 Not Modified)
@@ -164,7 +164,7 @@ export function getFile() {
     const response = http.get(`${restUrl}/file/${id}`);
 
     // Wir erwarten 200 OK oder 404 Not Found (falls kein File existiert)
-    // Damit k6 das nicht zwingend als Fehler wertet, wenn ein Autohaus kein Bild hat, 
+    // Damit k6 das nicht zwingend als Fehler wertet, wenn ein Autohaus kein Bild hat,
     // prüfen wir, ob es einer der beiden erwarteten Statuscodes ist.
     expect([200, 404]).toContain(response.status);
     sleep(1);
@@ -172,7 +172,10 @@ export function getFile() {
 
 // Testet 404 bei unbekannten Suchparametern
 export function getByNameNichtVorhanden() {
-    const name = namenNichtVorhanden[Math.floor(Math.random() * namenNichtVorhanden.length)];
+    const name =
+        namenNichtVorhanden[
+            Math.floor(Math.random() * namenNichtVorhanden.length)
+        ];
     const response = http.get(`${restUrl}?name=${name}`);
 
     expect(response.status).toBe(404);
