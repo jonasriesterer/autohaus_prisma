@@ -12,7 +12,7 @@ http:
       disabled: true
   params:
     - name: id
-      value: "1"
+      value: "101"
       type: path
   body:
     type: multipart-form
@@ -36,6 +36,7 @@ http:
       id: credentials
       placement:
         header: Bearer
+      source: access_token
     settings:
       autoFetchToken: true
       autoRefreshToken: false

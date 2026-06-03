@@ -1,5 +1,5 @@
 info:
-  name: Datei zu Autohaus mit ID 100
+  name: Datei zu Autohaus mit ID 101
   type: http
   seq: 3
 
@@ -8,7 +8,7 @@ http:
   url: "{{restUrl}}/file/:id"
   params:
     - name: id
-      value: "100"
+      value: "101"
       type: path
   auth: inherit
 
