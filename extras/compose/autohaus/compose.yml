@@ -74,6 +74,11 @@ services:
         read_only: true
     networks: [acme-network]
     env_file: .env
+    environment:
+      KEYCLOAK_HOST: keycloak
+      KEYCLOAK_PORT: 8443
+      KEYCLOAK_ISSUER_HOST: localhost
+      KEYCLOAK_ISSUER_PORT: 8843
     # generierter Rechnername, damit die Abfrage bzgl. Docker funktioniert
     #hostname: autohaus
     cap_drop: [ALL]

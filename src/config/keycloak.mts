@@ -25,6 +25,15 @@ import { env } from './env.mts';
 const logger = getLogger('config/keycloak', 'file');
 
 const { keycloak } = config;
+const {
+    CLIENT_SECRET,
+    NODE_ENV,
+    KEYCLOAK_HOST,
+    KEYCLOAK_PORT,
+    KEYCLOAK_SCHEMA,
+    KEYCLOAK_ISSUER_HOST,
+    KEYCLOAK_ISSUER_PORT,
+} = env;
 
 if (keycloak !== undefined && keycloak !== null) {
     if (
@@ -51,23 +60,48 @@ if (keycloak !== undefined && keycloak !== null) {
     }
 }
 
-const schema = (keycloak?.schema as string | undefined) ?? 'https';
-const host = (keycloak?.host as string | undefined) ?? 'keycloak';
-const port = (keycloak?.port as number | undefined) ?? 8443;
+const schema =
+    KEYCLOAK_SCHEMA ?? (keycloak?.schema as string | undefined) ?? 'https';
+const host =
+    KEYCLOAK_HOST ?? (keycloak?.host as string | undefined) ?? 'keycloak';
+const portFromEnv =
+    KEYCLOAK_PORT === undefined ? undefined : Number(KEYCLOAK_PORT);
+
+if (KEYCLOAK_PORT !== undefined && Number.isNaN(portFromEnv)) {
+    throw new TypeError(
+        'Die Umgebungsvariable KEYCLOAK_PORT muss eine Zahl sein',
+    );
+}
+const port = portFromEnv ?? (keycloak?.port as number | undefined) ?? 8443;
 const authServerUrl = `${schema}://${host}:${port}`;
+
+const issuerHost = KEYCLOAK_ISSUER_HOST ?? host;
+const issuerPortFromEnv =
+    KEYCLOAK_ISSUER_PORT === undefined
+        ? undefined
+        : Number(KEYCLOAK_ISSUER_PORT);
+
+if (KEYCLOAK_ISSUER_PORT !== undefined && Number.isNaN(issuerPortFromEnv)) {
+    throw new TypeError(
+        'Die Umgebungsvariable KEYCLOAK_ISSUER_PORT muss eine Zahl sein',
+    );
+}
+const issuerPort =
+    issuerPortFromEnv ?? (keycloak?.port as number | undefined) ?? 8443;
+const issuerSchema =
+    KEYCLOAK_SCHEMA ?? (keycloak?.schema as string | undefined) ?? 'https';
+const issuerAuthServerUrl = `${issuerSchema}://${issuerHost}:${issuerPort}`;
+
 // Keycloak ist in Sicherheits-Bereiche (= realms) unterteilt
 const realm = (keycloak?.realm as string | undefined) ?? 'javascript';
-const issuer = `${authServerUrl}/realms/${realm}`;
-const oidcUrl = `${issuer}/protocol/openid-connect`;
-const jwksUri = `${oidcUrl}/certs`;
+const issuer = `${issuerAuthServerUrl}/realms/${realm}`;
+const jwksUri = `${authServerUrl}/realms/${realm}/protocol/openid-connect/certs`;
 const clientId =
     (keycloak?.clientId as string | undefined) ?? 'javascript-client';
 const audience = ['account'];
 
 // fuer KeycloakService
-const accessTokenUrl = `${oidcUrl}/token`;
-
-const { CLIENT_SECRET, NODE_ENV } = env;
+const accessTokenUrl = `${authServerUrl}/realms/${realm}/protocol/openid-connect/token`;
 
 export const keycloakConfig = {
     realm,

@@ -21,7 +21,17 @@
 import process from 'node:process';
 import { styleText } from 'node:util';
 
-const { NODE_ENV: nodeEnv, BUN_ENV, CLIENT_SECRET, LOG_LEVEL } = process.env;
+const {
+    NODE_ENV: nodeEnv,
+    BUN_ENV,
+    CLIENT_SECRET,
+    KEYCLOAK_HOST,
+    KEYCLOAK_PORT,
+    KEYCLOAK_SCHEMA,
+    KEYCLOAK_ISSUER_HOST,
+    KEYCLOAK_ISSUER_PORT,
+    LOG_LEVEL,
+} = process.env;
 const NODE_ENV = nodeEnv ?? BUN_ENV;
 
 // "as const" fuer readonly
@@ -30,6 +40,11 @@ const NODE_ENV = nodeEnv ?? BUN_ENV;
 export type EnvType = {
     NODE_ENV: string | undefined;
     CLIENT_SECRET: string | undefined;
+    KEYCLOAK_HOST: string | undefined;
+    KEYCLOAK_PORT: string | undefined;
+    KEYCLOAK_SCHEMA: string | undefined;
+    KEYCLOAK_ISSUER_HOST: string | undefined;
+    KEYCLOAK_ISSUER_PORT: string | undefined;
     LOG_LEVEL: string | undefined;
 };
 
@@ -45,6 +60,11 @@ export const env: EnvType = {
     // - `test`
     NODE_ENV,
     CLIENT_SECRET,
+    KEYCLOAK_HOST,
+    KEYCLOAK_PORT,
+    KEYCLOAK_SCHEMA,
+    KEYCLOAK_ISSUER_HOST,
+    KEYCLOAK_ISSUER_PORT,
     LOG_LEVEL,
 } as const;
 /* eslint-enable @typescript-eslint/naming-convention */
