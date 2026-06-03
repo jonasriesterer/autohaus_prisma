@@ -12,7 +12,7 @@ http:
       disabled: true
   params:
     - name: id
-      value: "1"
+      value: "100"
       type: path
   body:
     type: multipart-form
@@ -50,7 +50,7 @@ runtime:
     - name: clientId
       value: javascript-client
     - name: clientSecret
-      value: Pw1Q6cLQ8LwDtNB8wvkA6lBXGRVOulEu
+      value: 0GzEhEG6MUnn0WqpgMHpTWH7tvMQzC3m
   assertions:
     - expression: res.status
       operator: eq
